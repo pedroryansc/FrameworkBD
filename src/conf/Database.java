@@ -8,7 +8,7 @@ public class Database {
 	private String nome;
 	private List<Tabela> tabelas = new ArrayList<Tabela>();
 	
-	public void addTable(Tabela tabela) {
+	public void addTabela(Tabela tabela) {
 		tabelas.add(tabela);
 	}
 	

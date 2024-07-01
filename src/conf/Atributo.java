@@ -12,6 +12,32 @@ public class Atributo {
 	public Atributo(String nome) {
 		setNome(nome);
 	}
+
+	public String getTipoDado() {
+		return tipoDado;
+	}
+	
+	public void integer() {
+		tipoDado = "INT";
+	}
+	
+	public void decimal() {
+		tipoDado = "DECIMAL";
+	}
+	
+	public void decimal(int tamanho, int d) {
+		if(tamanho >= 1 && tamanho <= 65 && d >= 0 && d <= 30 && tamanho > d)
+			tipoDado = "DECIMAL(" + tamanho + ", " + d + ")";
+	}
+	
+	public void varchar(int tamanho) {
+		if(tamanho >= 0)
+			tipoDado = "VARCHAR(" + tamanho + ")";
+	}
+	
+	public void date() {
+		tipoDado = "DATE";
+	}
 	
 	public String getNome() {
 		return nome;
@@ -21,19 +47,11 @@ public class Atributo {
 		this.nome = nome;
 	}
 	
-	public String getTipoDado() {
-		return tipoDado;
-	}
-	
-	public void setTipoDado(String tipoDado) {
-		this.tipoDado = tipoDado;
-	}
-	
 	public boolean isPrimaryKey() {
 		return primaryKey;
 	}
 	
-	public void setPrimaryKey(boolean primaryKey) {
+	public void primaryKey(boolean primaryKey) {
 		this.primaryKey = primaryKey;
 	}
 	
@@ -41,7 +59,7 @@ public class Atributo {
 		return notNull;
 	}
 	
-	public void setNotNull(boolean notNull) {
+	public void notNull(boolean notNull) {
 		this.notNull = notNull;
 	}
 	
@@ -49,7 +67,7 @@ public class Atributo {
 		return unique;
 	}
 	
-	public void setUnique(boolean unique) {
+	public void unique(boolean unique) {
 		this.unique = unique;
 	}
 	
@@ -57,7 +75,7 @@ public class Atributo {
 		return autoIncrement;
 	}
 	
-	public void setAutoIncrement(boolean autoIncrement) {
+	public void autoIncrement(boolean autoIncrement) {
 		this.autoIncrement = autoIncrement;
 	}
 	

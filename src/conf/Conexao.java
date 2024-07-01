@@ -20,28 +20,44 @@ public class Conexao {
 	public static void executar(Database bd, Configuracao conf) {
 		try {
 			Connection conn = Conexao.conectar(conf);
+			
 			PreparedStatement ps;
 			
-			String script = "CREATE SCHEMA " + bd.getNome() + ";";
+			String script = "CREATE SCHEMA IF NOT EXISTS " + bd.getNome() + ";";
 			ps = conn.prepareStatement(script);
 			ps.execute();
 			System.out.println(script + "\n");
 			
-			script = "USE " + bd.getNome() + ";";
-			ps = conn.prepareStatement(script);
-			ps.execute();
-			System.out.println(script + "\n");
-			
-			for(Tabela tabela : bd.getTabelas()) {
-				script = "CREATE TABLE " + tabela.getNome() + "( \n";
-				for(Atributo atr : tabela.getAtributos()) {
-					script += atr.getNome() + " varchar(45), \n";
-				}
-				script += "PRIMARY KEY(" + tabela.getAtributos().get(0).getNome() + "));";
+			if(!(bd.getTabelas().isEmpty())) {
+				script = "USE " + bd.getNome() + ";";
 				ps = conn.prepareStatement(script);
 				ps.execute();
 				System.out.println(script + "\n");
+				
+				for(Tabela tabela : bd.getTabelas()) {
+					script = "CREATE TABLE " + tabela.getNome() + "( \n";
+					for(Atributo atr : tabela.getAtributos()) {
+						if(atr != tabela.getAtributos().get(0))
+							script += ",\n";
+						script += "	" + atr.getNome() + " " + atr.getTipoDado();
+						if(atr.isPrimaryKey())
+							script += " PRIMARY KEY";
+						if(atr.isNotNull())
+							script += " NOT NULL";
+						if(atr.isAutoIncrement())
+							script += "AUTO INCREMENT";
+						if(atr.isUnique())
+							script += ",\n	UNIQUE (" + atr.getNome() + ")";
+					}
+					script += "\n);";
+					ps = conn.prepareStatement(script);
+					ps.execute();
+					System.out.println(script + "\n");
+				}
 			}
+			
+			ps.close();
+			conn.close();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
