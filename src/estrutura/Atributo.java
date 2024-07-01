@@ -5,14 +5,27 @@ public class Atributo {
 	private String nome;
 	private String tipoDado;
 	private boolean primaryKey = false;
+	private ChaveEstrangeira foreignKey = null;
 	private boolean notNull = false;
 	private boolean unique = false;
 	private boolean autoIncrement = false;
 	
+	public Atributo() {
+		
+	}
+	
 	public Atributo(String nome) {
 		setNome(nome);
 	}
-
+	
+	public String getNome() {
+		return nome;
+	}
+	
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+	
 	public String getTipoDado() {
 		return tipoDado;
 	}
@@ -39,12 +52,8 @@ public class Atributo {
 		tipoDado = "DATE";
 	}
 	
-	public String getNome() {
-		return nome;
-	}
-	
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void bool() {
+		tipoDado = "BOOL";
 	}
 	
 	public boolean isPrimaryKey() {
@@ -55,6 +64,14 @@ public class Atributo {
 		this.primaryKey = primaryKey;
 	}
 	
+	public ChaveEstrangeira getForeignKey() {
+		return foreignKey;
+	}
+
+	public void foreignKey(String chavePrimaria, String tabela) {
+		foreignKey = new ChaveEstrangeira(chavePrimaria, tabela);
+	}
+
 	public boolean isNotNull() {
 		return notNull;
 	}

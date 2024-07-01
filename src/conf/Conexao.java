@@ -3,9 +3,7 @@ package conf;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 
-import estrutura.Atributo;
-import estrutura.Database;
-import estrutura.Tabela;
+import estrutura.*;
 
 import java.sql.Connection;
 
@@ -50,9 +48,12 @@ public class Conexao {
 						if(atr.isNotNull())
 							script += " NOT NULL";
 						if(atr.isAutoIncrement())
-							script += "AUTO INCREMENT";
+							script += " AUTO_INCREMENT";
 						if(atr.isUnique())
 							script += ",\n	UNIQUE (" + atr.getNome() + ")";
+						if(atr.getForeignKey() != null)
+							script += ",\n	FOREIGN KEY ("+ atr.getNome() + ") REFERENCES " + atr.getForeignKey().getTabela() + " ("
+										+ atr.getForeignKey().getChavePrimaria() + ")";
 					}
 					script += "\n);";
 					ps = conn.prepareStatement(script);

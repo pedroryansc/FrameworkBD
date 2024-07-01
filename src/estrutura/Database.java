@@ -8,12 +8,16 @@ public class Database {
 	private String nome;
 	private List<Tabela> tabelas = new ArrayList<Tabela>();
 	
-	public void addTabela(Tabela tabela) {
-		tabelas.add(tabela);
+	public Database() {
+		
 	}
 	
 	public Database(String nome) {
 		setNome(nome);
+	}
+	
+	public void addTabela(Tabela tabela) {
+		tabelas.add(tabela);
 	}
 
 	public String getNome() {
@@ -26,10 +30,6 @@ public class Database {
 
 	public List<Tabela> getTabelas() {
 		return tabelas;
-	}
-
-	public void setTabelas(List<Tabela> tabelas) {
-		this.tabelas = tabelas;
 	}
 	
 }

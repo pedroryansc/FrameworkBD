@@ -8,6 +8,10 @@ public class Tabela {
 	private String nome;
 	private List<Atributo> atributos = new ArrayList<Atributo>();
 	
+	public Tabela() {
+		
+	}
+	
 	public Tabela(String nome) {
 		setNome(nome);
 	}
@@ -26,10 +30,6 @@ public class Tabela {
 
 	public List<Atributo> getAtributos() {
 		return atributos;
-	}
-
-	public void setAtributos(List<Atributo> atributos) {
-		this.atributos = atributos;
 	}
 	
 }

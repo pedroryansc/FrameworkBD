@@ -30,6 +30,7 @@ public class Main {
 		id.primaryKey(true);
 		id.notNull(true);
 		id.unique(true);
+		id.autoIncrement(true);
 		
 		Atributo nome = new Atributo("nome");
 		nome.varchar(255);
@@ -67,6 +68,29 @@ public class Main {
 		trator.addAtributo(modelo);
 		
 		bd.addTabela(trator);
+		
+		Tabela vendaJogo = new Tabela("vendaJogo");
+		
+		vendaJogo.addAtributo(id);
+		
+		Atributo dataVenda = new Atributo("dataVenda");
+		dataVenda.date();
+		dataVenda.notNull(true);
+		
+		Atributo pago = new Atributo("pago");
+		pago.bool();
+		pago.notNull(true);
+		
+		Atributo id_jogo = new Atributo("id_jogo");
+		id_jogo.integer();
+		id_jogo.notNull(true);
+		id_jogo.foreignKey("id", "jogos");
+		
+		vendaJogo.addAtributo(dataVenda);
+		vendaJogo.addAtributo(pago);
+		vendaJogo.addAtributo(id_jogo);
+		
+		bd.addTabela(vendaJogo);
 		
 		// Execução do script para criar o banco de dados no SGBD
 		
