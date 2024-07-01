@@ -58,6 +58,8 @@ public class Main {
 		
 		bd.addTabela(jogos);
 		
+		// Adição de uma nova tabela
+		
 		Tabela trator = new Tabela("trator");
 		
 		trator.addAtributo(id);
@@ -68,6 +70,8 @@ public class Main {
 		trator.addAtributo(modelo);
 		
 		bd.addTabela(trator);
+		
+		// Tabela com chaves estrangeiras
 		
 		Tabela vendaJogo = new Tabela("vendaJogo");
 		
@@ -86,9 +90,15 @@ public class Main {
 		id_jogo.notNull(true);
 		id_jogo.foreignKey("id", "jogos");
 		
+		Atributo id_trator = new Atributo("id_trator");
+		id_trator.integer();
+		id_trator.notNull(true);
+		id_trator.foreignKey("id", "trator");
+		
 		vendaJogo.addAtributo(dataVenda);
 		vendaJogo.addAtributo(pago);
 		vendaJogo.addAtributo(id_jogo);
+		vendaJogo.addAtributo(id_trator);
 		
 		bd.addTabela(vendaJogo);
 		
