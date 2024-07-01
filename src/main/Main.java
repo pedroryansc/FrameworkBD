@@ -1,4 +1,7 @@
-package conf;
+package main;
+
+import conf.*;
+import estrutura.*;
 
 public class Main {
 	public static void main(String[] args) {
@@ -10,7 +13,7 @@ public class Main {
 		conf.setHost("localhost");
 		conf.setPorta(3306);
 		conf.setUsuario("root");
-		conf.setSenha("");
+		conf.setSenha("Sobaoeim123#");
 		
 		// Criação da estrutura do banco de dados
 		
@@ -53,6 +56,17 @@ public class Main {
 		jogos.addAtributo(dataLancamento);
 		
 		bd.addTabela(jogos);
+		
+		Tabela trator = new Tabela("trator");
+		
+		trator.addAtributo(id);
+		
+		Atributo modelo = new Atributo("modelo");
+		modelo.varchar(45);
+		
+		trator.addAtributo(modelo);
+		
+		bd.addTabela(trator);
 		
 		// Execução do script para criar o banco de dados no SGBD
 		

@@ -2,6 +2,11 @@ package conf;
 
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+
+import estrutura.Atributo;
+import estrutura.Database;
+import estrutura.Tabela;
+
 import java.sql.Connection;
 
 public class Conexao {
@@ -12,14 +17,14 @@ public class Conexao {
 			return DriverManager.getConnection(url, conf.getUsuario(), conf.getSenha());
 		} catch(Exception e){
 			System.out.println("Erro: " + e.toString());
-			// e.printStackTrace();
+			e.printStackTrace();
 			return null;
 		}
 	}
 	
 	public static void executar(Database bd, Configuracao conf) {
 		try {
-			Connection conn = Conexao.conectar(conf);
+			Connection conn = conectar(conf);
 			
 			PreparedStatement ps;
 			
@@ -32,10 +37,10 @@ public class Conexao {
 				script = "USE " + bd.getNome() + ";";
 				ps = conn.prepareStatement(script);
 				ps.execute();
-				System.out.println(script + "\n");
+				System.out.println(script);
 				
 				for(Tabela tabela : bd.getTabelas()) {
-					script = "CREATE TABLE " + tabela.getNome() + "( \n";
+					script = "CREATE TABLE IF NOT EXISTS " + tabela.getNome() + "( \n";
 					for(Atributo atr : tabela.getAtributos()) {
 						if(atr != tabela.getAtributos().get(0))
 							script += ",\n";
@@ -52,7 +57,7 @@ public class Conexao {
 					script += "\n);";
 					ps = conn.prepareStatement(script);
 					ps.execute();
-					System.out.println(script + "\n");
+					System.out.println("\n" + script);
 				}
 			}
 			

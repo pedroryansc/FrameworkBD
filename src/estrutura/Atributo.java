@@ -1,4 +1,4 @@
-package conf;
+package estrutura;
 
 public class Atributo {
 

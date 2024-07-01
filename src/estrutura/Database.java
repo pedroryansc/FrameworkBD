@@ -1,4 +1,4 @@
-package conf;
+package estrutura;
 
 import java.util.List;
 import java.util.ArrayList;
