@@ -68,7 +68,7 @@ public class Atributo {
 		return foreignKey;
 	}
 
-	public void foreignKey(String chavePrimaria, String tabela) {
+	public void foreignKey(Atributo chavePrimaria, Tabela tabela) {
 		foreignKey = new ChaveEstrangeira(chavePrimaria, tabela);
 	}
 

@@ -13,7 +13,7 @@ public class Main {
 		conf.setHost("localhost");
 		conf.setPorta(3306);
 		conf.setUsuario("root");
-		conf.setSenha("Sobaoeim123#");
+		conf.setSenha("");
 		
 		// Criação da estrutura do banco de dados
 		
@@ -88,12 +88,12 @@ public class Main {
 		Atributo id_jogo = new Atributo("id_jogo");
 		id_jogo.integer();
 		id_jogo.notNull(true);
-		id_jogo.foreignKey("id", "jogos");
+		id_jogo.foreignKey(id, jogos);
 		
 		Atributo id_trator = new Atributo("id_trator");
 		id_trator.integer();
 		id_trator.notNull(true);
-		id_trator.foreignKey("id", "trator");
+		id_trator.foreignKey(id, trator);
 		
 		vendaJogo.addAtributo(dataVenda);
 		vendaJogo.addAtributo(pago);
@@ -101,6 +101,31 @@ public class Main {
 		vendaJogo.addAtributo(id_trator);
 		
 		bd.addTabela(vendaJogo);
+		
+		Tabela jogo_trator = new Tabela("jogo_trator");
+		
+		id_jogo = new Atributo("id_jogo");
+		
+		id_jogo.primaryKey(true);
+		id_jogo.integer();
+		id_jogo.notNull(true);
+		id_jogo.foreignKey(id, jogos);
+		
+		id_trator = new Atributo("id_trator");
+		
+		id_trator.primaryKey(true);
+		id_trator.integer();
+		id_trator.notNull(true);
+		id_trator.foreignKey(id, trator);
+		
+		Atributo quant = new Atributo("quantidade");
+		quant.integer();
+		
+		jogo_trator.addAtributo(id_jogo);
+		jogo_trator.addAtributo(id_trator);
+		jogo_trator.addAtributo(quant);
+		
+		bd.addTabela(jogo_trator);
 		
 		// Execução do script para criar o banco de dados no SGBD
 		
