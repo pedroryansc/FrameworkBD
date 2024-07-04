@@ -5,9 +5,9 @@ public class ChaveEstrangeira {
 	private String chavePrimaria;
 	private String tabela;
 	
-	public ChaveEstrangeira(Atributo chavePrimaria, Tabela tabela) {
-		setChavePrimaria(chavePrimaria.getNome());
-		setTabela(tabela.getNome());
+	public ChaveEstrangeira(String chavePrimaria, String tabela) {
+		setChavePrimaria(chavePrimaria);
+		setTabela(tabela);
 	}
 
 	public String getChavePrimaria() {

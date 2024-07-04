@@ -23,31 +23,35 @@ public class Configuracao {
 		return host;
 	}
 
-	public void setHost(String host) {
+	public Configuracao host(String host) {
 		this.host = host;
+		return this;
 	}
 
 	public int getPorta() {
 		return porta;
 	}
 
-	public void setPorta(int porta) {
+	public Configuracao porta(int porta) {
 		this.porta = porta;
+		return this;
 	}
 
 	public String getUsuario() {
 		return usuario;
 	}
 
-	public void setUsuario(String usuario) {
+	public Configuracao usuario(String usuario) {
 		this.usuario = usuario;
+		return this;
 	}
 
 	public String getSenha() {
 		return senha;
 	}
 
-	public void setSenha(String senha) {
+	public Configuracao senha(String senha) {
 		this.senha = senha;
+		return this;
 	}
 }

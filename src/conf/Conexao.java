@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Conexao {
 	
-	public static Connection conectar(Configuracao conf) {
+	private static Connection conectar(Configuracao conf) {
 		try {
 			String url = "jdbc:mysql://" + conf.getHost() + ":" + conf.getPorta();
 			return DriverManager.getConnection(url, conf.getUsuario(), conf.getSenha());
@@ -26,76 +26,79 @@ public class Conexao {
 		try {
 			Connection conn = conectar(conf);
 			
+			String[] script = gerarScript(bd).split("(?<=;\n)");
+			
 			PreparedStatement ps;
 			
-			String script = "CREATE SCHEMA IF NOT EXISTS " + bd.getNome() + ";";
-			ps = conn.prepareStatement(script);
-			ps.execute();
-			System.out.println(script + "\n");
-			
-			if(!(bd.getTabelas().isEmpty())) {
-				script = "USE " + bd.getNome() + ";";
-				ps = conn.prepareStatement(script);
+			for(String comando : script) {
+				ps = conn.prepareStatement(comando);
 				ps.execute();
-				System.out.println(script);
-				
-				for(Tabela tabela : bd.getTabelas()) {
-					
-					// Criação das listas de chaves primárias e estrangeiras
-					
-					List<String> pk = new ArrayList<String>();
-					List<Atributo> fk = new ArrayList<Atributo>();
-					
-					script = "CREATE TABLE IF NOT EXISTS " + tabela.getNome() + "( \n";
-					for(Atributo atr : tabela.getAtributos()) {
-						if(atr != tabela.getAtributos().get(0))
-							script += ",\n";
-						script += "	" + atr.getNome() + " " + atr.getTipoDado();
-						if(atr.isPrimaryKey())
-							pk.add(atr.getNome());
-						if(atr.isNotNull())
-							script += " NOT NULL";
-						if(atr.isAutoIncrement())
-							script += " AUTO_INCREMENT";
-						if(atr.isUnique())
-							script += ",\n	UNIQUE (" + atr.getNome() + ")";
-						if(atr.getForeignKey() != null)
-							fk.add(atr);
-					}
-					
-					// Definição de chave(s) primária(s)
-					
-					if(!(pk.isEmpty())) {
-						script += ",\n	PRIMARY KEY (";
-						for(int i = 0; i < pk.size(); i++) {
-							if(i > 0)
-								script += ", ";
-							script += pk.get(i);
-						}
-						script += ")";
-					}
-					
-					// Definição de chave(s) estrangeira(s)
-					
-					if(!(fk.isEmpty())) {
-						for(int i = 0; i < fk.size(); i++) {
-							script += ",\n	FOREIGN KEY ("+ fk.get(i).getNome() + ") REFERENCES "
-										+ fk.get(i).getForeignKey().getTabela() + " ("
-										+ fk.get(i).getForeignKey().getChavePrimaria() + ")";
-						}
-					}
-					script += "\n);";
-					ps = conn.prepareStatement(script);
-					ps.execute();
-					System.out.println("\n" + script);
-				}
 			}
+
+			System.out.println("Script executado com sucesso.");
 			
-			ps.close();
 			conn.close();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static String gerarScript(Database bd) {
+		String script = "CREATE SCHEMA IF NOT EXISTS " + bd.getNome() + ";";
+		
+		if(!(bd.getTabelas().isEmpty())) {
+			script += "\n\nUSE " + bd.getNome() + ";\n";
+			
+			for(Tabela tabela : bd.getTabelas()) {
+				
+				// Criação das listas de chaves primárias e estrangeiras
+				
+				List<String> pk = new ArrayList<String>();
+				List<Atributo> fk = new ArrayList<Atributo>();
+				
+				script += "\nCREATE TABLE IF NOT EXISTS " + tabela.getNome() + "( \n";
+				for(Atributo atr : tabela.getAtributos()) {
+					if(atr != tabela.getAtributos().get(0))
+						script += ",\n";
+					script += "	" + atr.getNome() + " " + atr.getTipoDado();
+					if(atr.isPrimaryKey())
+						pk.add(atr.getNome());
+					if(atr.isNotNull())
+						script += " NOT NULL";
+					if(atr.isAutoIncrement())
+						script += " AUTO_INCREMENT";
+					if(atr.isUnique())
+						script += ",\n	UNIQUE (" + atr.getNome() + ")";
+					if(atr.getForeignKey() != null)
+						fk.add(atr);
+				}
+				
+				// Definição de chave(s) primária(s)
+				
+				if(!(pk.isEmpty())) {
+					script += ",\n	PRIMARY KEY (";
+					for(int i = 0; i < pk.size(); i++) {
+						if(i > 0)
+							script += ", ";
+						script += pk.get(i);
+					}
+					script += ")";
+				}
+				
+				// Definição de chave(s) estrangeira(s)
+				
+				if(!(fk.isEmpty())) {
+					for(int i = 0; i < fk.size(); i++) {
+						script += ",\n	FOREIGN KEY ("+ fk.get(i).getNome() + ") REFERENCES "
+									+ fk.get(i).getForeignKey().getTabela() + " ("
+									+ fk.get(i).getForeignKey().getChavePrimaria() + ")";
+					}
+				}
+				
+				script += "\n);\n";
+			}
+		}
+		return script;
 	}
 	
 }

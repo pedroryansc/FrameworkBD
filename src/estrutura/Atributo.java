@@ -10,90 +10,98 @@ public class Atributo {
 	private boolean unique = false;
 	private boolean autoIncrement = false;
 	
-	public Atributo() {
-		
-	}
-	
 	public Atributo(String nome) {
-		setNome(nome);
+		nome(nome);
 	}
 	
 	public String getNome() {
 		return nome;
 	}
 	
-	public void setNome(String nome) {
+	public Atributo nome(String nome) {
 		this.nome = nome;
+		return this;
 	}
 	
 	public String getTipoDado() {
 		return tipoDado;
 	}
 	
-	public void integer() {
+	public Atributo integer() {
 		tipoDado = "INT";
+		return this;
 	}
 	
-	public void decimal() {
+	public Atributo decimal() {
 		tipoDado = "DECIMAL";
+		return this;
 	}
 	
-	public void decimal(int tamanho, int d) {
+	public Atributo decimal(int tamanho, int d) {
 		if(tamanho >= 1 && tamanho <= 65 && d >= 0 && d <= 30 && tamanho > d)
 			tipoDado = "DECIMAL(" + tamanho + ", " + d + ")";
+		return this;
 	}
 	
-	public void varchar(int tamanho) {
+	public Atributo varchar(int tamanho) {
 		if(tamanho >= 0)
 			tipoDado = "VARCHAR(" + tamanho + ")";
+		return this;
 	}
 	
-	public void date() {
+	public Atributo date() {
 		tipoDado = "DATE";
+		return this;
 	}
 	
-	public void bool() {
+	public Atributo bool() {
 		tipoDado = "BOOL";
+		return this;
 	}
 	
 	public boolean isPrimaryKey() {
 		return primaryKey;
 	}
 	
-	public void primaryKey(boolean primaryKey) {
-		this.primaryKey = primaryKey;
+	public Atributo primaryKey() {
+		primaryKey = true;
+		return this;
 	}
 	
 	public ChaveEstrangeira getForeignKey() {
 		return foreignKey;
 	}
 
-	public void foreignKey(Atributo chavePrimaria, Tabela tabela) {
-		foreignKey = new ChaveEstrangeira(chavePrimaria, tabela);
+	public Atributo foreignKey(String chavePrimaria, Tabela tabela) {
+		foreignKey = new ChaveEstrangeira(chavePrimaria, tabela.getNome());
+		return this;
 	}
 
 	public boolean isNotNull() {
 		return notNull;
 	}
 	
-	public void notNull(boolean notNull) {
-		this.notNull = notNull;
+	public Atributo notNull() {
+		notNull = true;
+		return this;
 	}
 	
 	public boolean isUnique() {
 		return unique;
 	}
 	
-	public void unique(boolean unique) {
-		this.unique = unique;
+	public Atributo unique() {
+		unique = true;
+		return this;
 	}
 	
 	public boolean isAutoIncrement() {
 		return autoIncrement;
 	}
 	
-	public void autoIncrement(boolean autoIncrement) {
-		this.autoIncrement = autoIncrement;
+	public Atributo autoIncrement() {
+		autoIncrement = true;
+		return this;
 	}
 	
 }

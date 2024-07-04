@@ -10,124 +10,65 @@ public class Main {
 		
 		Configuracao conf = Configuracao.getInstance();
 		
-		conf.setHost("localhost");
-		conf.setPorta(3306);
-		conf.setUsuario("root");
-		conf.setSenha("");
+		conf.host("localhost");
+		conf.porta(3306);
+		conf.usuario("root");
+		conf.senha("");
 		
 		// Criação da estrutura do banco de dados
 		
 		Database bd = new Database("vendas");
 		
-		// Criação da tabela
+		// Tabela simples
 		
-		Tabela jogos = new Tabela("jogos");
+		Tabela cliente = new Tabela("cliente");
 		
 		// Criação e configuração dos atributos
 		
-		Atributo id = new Atributo("id");
-		id.integer();
-		id.primaryKey(true);
-		id.notNull(true);
-		id.unique(true);
-		id.autoIncrement(true);
+		cliente.criarAtributo("id").integer().primaryKey().notNull().unique().autoIncrement();
+		cliente.criarAtributo("nome").varchar(45).notNull();
+		cliente.criarAtributo("dataNascimento").date();
 		
-		Atributo nome = new Atributo("nome");
-		nome.varchar(255);
-		nome.notNull(true);
+		// Montagem do Banco de Dados
 		
-		Atributo plataforma = new Atributo("plataforma");
-		plataforma.varchar(45);
-		plataforma.notNull(true);
+		bd.addTabela(cliente);
 		
-		Atributo preco = new Atributo("preco");
-		preco.decimal(6, 2);
-		preco.notNull(true);
+		// Criação de uma nova tabela simples
 		
-		Atributo dataLancamento = new Atributo("dataLancamento");
-		dataLancamento.date();
-		dataLancamento.notNull(true);
+		Tabela forn = new Tabela("fornecedor");
 		
-		// Montagem do banco de dados
+		forn.criarAtributo("id").integer().primaryKey().notNull().unique().autoIncrement();
+		forn.criarAtributo("nome").varchar(45).notNull();
 		
-		jogos.addAtributo(id);
-		jogos.addAtributo(nome);
-		jogos.addAtributo(plataforma);
-		jogos.addAtributo(preco);
-		jogos.addAtributo(dataLancamento);
+		bd.addTabela(forn);
 		
-		bd.addTabela(jogos);
+		// Tabela com chave estrangeira
 		
-		// Adição de uma nova tabela
+		Tabela produto = new Tabela("produto");
 		
-		Tabela trator = new Tabela("trator");
+		produto.criarAtributo("id").varchar(45).primaryKey().notNull().unique();
+		produto.criarAtributo("descricao").varchar(45).notNull();
+		produto.criarAtributo("preco_unidade").decimal(6,2).notNull();
+		produto.criarAtributo("id_fornecedor").integer().notNull().foreignKey("id", forn);
 		
-		trator.addAtributo(id);
+		bd.addTabela(produto);
 		
-		Atributo modelo = new Atributo("modelo");
-		modelo.varchar(45);
+		// Tabela associativa
 		
-		trator.addAtributo(modelo);
+		Tabela venda = new Tabela("venda");
 		
-		bd.addTabela(trator);
+		venda.criarAtributo("id").integer().primaryKey().notNull().unique().autoIncrement();
+		venda.criarAtributo("id_cliente").integer().primaryKey().notNull().foreignKey("id", cliente);
+		venda.criarAtributo("id_produto").varchar(45).primaryKey().notNull().foreignKey("id", produto);
+		venda.criarAtributo("quant").integer().notNull();
+		venda.criarAtributo("preco_total").decimal(6,2).notNull();
+		venda.criarAtributo("pago").bool().notNull();
 		
-		// Tabela com chaves estrangeiras
+		bd.addTabela(venda);
 		
-		Tabela vendaJogo = new Tabela("vendaJogo");
+		// Geração e execução do script para criar o banco de dados no SGBD
 		
-		vendaJogo.addAtributo(id);
-		
-		Atributo dataVenda = new Atributo("dataVenda");
-		dataVenda.date();
-		dataVenda.notNull(true);
-		
-		Atributo pago = new Atributo("pago");
-		pago.bool();
-		pago.notNull(true);
-		
-		Atributo id_jogo = new Atributo("id_jogo");
-		id_jogo.integer();
-		id_jogo.notNull(true);
-		id_jogo.foreignKey(id, jogos);
-		
-		Atributo id_trator = new Atributo("id_trator");
-		id_trator.integer();
-		id_trator.notNull(true);
-		id_trator.foreignKey(id, trator);
-		
-		vendaJogo.addAtributo(dataVenda);
-		vendaJogo.addAtributo(pago);
-		vendaJogo.addAtributo(id_jogo);
-		vendaJogo.addAtributo(id_trator);
-		
-		bd.addTabela(vendaJogo);
-		
-		Tabela jogo_trator = new Tabela("jogo_trator");
-		
-		id_jogo = new Atributo("id_jogo");
-		
-		id_jogo.primaryKey(true);
-		id_jogo.integer();
-		id_jogo.notNull(true);
-		id_jogo.foreignKey(id, jogos);
-		
-		id_trator = new Atributo("id_trator");
-		
-		id_trator.primaryKey(true);
-		id_trator.integer();
-		id_trator.notNull(true);
-		id_trator.foreignKey(id, trator);
-		
-		Atributo quant = new Atributo("quantidade");
-		quant.integer();
-		
-		jogo_trator.addAtributo(id_jogo);
-		jogo_trator.addAtributo(id_trator);
-		jogo_trator.addAtributo(quant);
-		
-		bd.addTabela(jogo_trator);
-		
-		// Execução do script para criar o banco de dados no SGBD
+		System.out.println(Conexao.gerarScript(bd));
 		
 		Conexao.executar(bd, conf);
 		

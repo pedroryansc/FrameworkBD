@@ -16,8 +16,10 @@ public class Tabela {
 		setNome(nome);
 	}
 	
-	public void addAtributo(Atributo atr) {
+	public Atributo criarAtributo(String nome) {
+		Atributo atr = new Atributo(nome);
 		atributos.add(atr);
+		return atr;
 	}
 
 	public String getNome() {
