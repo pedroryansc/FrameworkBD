@@ -28,7 +28,7 @@ public class Conexao {
 			
 			String[] script = gerarScript(bd).split("(?<=;\n)");
 			
-			PreparedStatement ps;
+			PreparedStatement ps = null;
 			
 			for(String comando : script) {
 				ps = conn.prepareStatement(comando);
@@ -37,6 +37,7 @@ public class Conexao {
 
 			System.out.println("Script executado com sucesso.");
 			
+			ps.close();
 			conn.close();
 		} catch(Exception e) {
 			e.printStackTrace();
