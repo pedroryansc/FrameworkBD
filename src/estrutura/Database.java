@@ -7,17 +7,15 @@ public class Database {
 
 	private String nome;
 	private List<Tabela> tabelas = new ArrayList<Tabela>();
-	
-	public Database() {
-		
-	}
-	
+
 	public Database(String nome) {
 		setNome(nome);
 	}
 	
-	public void addTabela(Tabela tabela) {
+	public Tabela criarTabela(String nome) {
+		Tabela tabela = new Tabela(nome);
 		tabelas.add(tabela);
+		return tabela;
 	}
 
 	public String getNome() {
